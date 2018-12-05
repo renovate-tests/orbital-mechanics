@@ -1,0 +1,100 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.1
+  release-workflows: hutson/library-release-workflows@2.0.3
+  my-orb:
+    executors:
+      python:
+        docker:
+          - image: python:3.7
+    commands:
+      deploy:
+        steps:
+          - checkout
+          - run: pip install --no-cache-dir twine
+          - run: python setup.py sdist bdist_wheel
+          - run: twine upload --password "${PYPI_PASSWORD}" --username "${PYPI_USERNAME}" dist/*
+
+test_plan: &test_plan
+  steps:
+    - checkout
+    - run: pip install --no-cache-dir pipenv
+    - run: pipenv install --dev --python python
+    - run: pipenv run tox
+    - codecov/upload:
+        path: coverage/
+
+jobs:
+  python_3_4_test_plan:
+    <<: [*test_plan]
+    docker:
+      - image: python:3.4
+    environment:
+      TOXENV: py34
+  python_3_5_test_plan:
+    <<: [*test_plan]
+    docker:
+      - image: python:3.5
+    environment:
+      TOXENV: py35
+  python_3_6_test_plan:
+    <<: [*test_plan]
+    docker:
+      - image: python:3.6
+    environment:
+      TOXENV: py36
+  python_3_7_test_plan:
+    <<: [*test_plan]
+    docker:
+      - image: python:3.7
+    environment:
+      TOXENV: py37
+  pypy_3_6_test_plan:
+    # We do not use this job because, at the time of writing, pipenv has not released a version
+    # with support for pypy - https://github.com/pypa/pipenv/issues/3313
+    <<: [*test_plan]
+    docker:
+      - image: pypy:3-6
+    environment:
+      TOXENV: pypy
+  python_lint_test_plan:
+    <<: [*test_plan]
+    docker:
+      - image: python:3.7
+    environment:
+      TOXENV: lint
+  deploy:
+    executor: my-orb/python
+    steps:
+      - my-orb/deploy
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - python_3_4_test_plan
+      - python_3_5_test_plan
+      - python_3_6_test_plan
+      - python_3_7_test_plan
+      - python_lint_test_plan
+      - release-workflows/deliver:
+          context: github-interaction
+          filters:
+            branches:
+              only: master
+          requires:
+            - python_3_4_test_plan
+            - python_3_5_test_plan
+            - python_3_6_test_plan
+            - python_3_7_test_plan
+            - python_lint_test_plan
+  deploy:
+    jobs:
+      - deploy:
+          context: pypi-interaction
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
