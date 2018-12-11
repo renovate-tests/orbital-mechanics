@@ -112,7 +112,7 @@ setup(
         'tox>=3.5.3,<4.0.0',
     ],
     url='',
-    version=subprocess
-    .Popen(['git', 'tag', '--points-at', 'HEAD'], stdout=subprocess.PIPE)
-    .stdout.read().rstrip().decode("utf-8") or '0.0.0'
+    version=(subprocess
+             .Popen(['git', 'tag', '--points-at', 'HEAD'], stdout=subprocess.PIPE)
+             .stdout.read().rstrip().decode('utf-8').split() or ['0.0.0'])[-1]
 )
