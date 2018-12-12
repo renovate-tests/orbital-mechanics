@@ -16,21 +16,21 @@ jobs:
   python_3_4_test_plan:
     <<: [*test_plan]
     docker:
-      - image: python:3.4@sha256:66642707e2ed6bf798bd5ab299236c120a6015595a6e4a27e699ef46529771f6
+      - image: python:3.7@sha256:3870d35b962a943df72d948580fc66ceaaee1c4fbd205930f32e0f0760eb1077
     environment:
       TOXENV: py34
 
   python_3_5_test_plan:
     <<: [*test_plan]
     docker:
-      - image: python:3.5@sha256:82c08ec0afced17b7a31d761d58428cced16f1d1bb903401690d2341ab6f0c61
+      - image: python:3.7@sha256:3870d35b962a943df72d948580fc66ceaaee1c4fbd205930f32e0f0760eb1077
     environment:
       TOXENV: py35
 
   python_3_6_test_plan:
     <<: [*test_plan]
     docker:
-      - image: python:3.6@sha256:fc34d5b6cf5d00a6139a74370dc27ddc9ce18303e2210d0f199a6050cc29aa45
+      - image: python:3.7@sha256:3870d35b962a943df72d948580fc66ceaaee1c4fbd205930f32e0f0760eb1077
     environment:
       TOXENV: py36
 
