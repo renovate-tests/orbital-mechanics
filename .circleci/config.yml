@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  release-workflows: hutson/library-release-workflows@4.1.0
+  release-workflows: hutson/library-release-workflows@4.1.6
 
 test_plan: &test_plan
   steps:
