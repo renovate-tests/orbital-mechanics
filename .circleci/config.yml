@@ -10,7 +10,7 @@ test_plan: &test_plan
     - run: pipenv install --dev --python python
     - run: pipenv run tox
 
-    # TODO: Upload binary distributable to Circle CI using the `Artifact` feature
+    # TODO: Upload binary distributable to Circle CI using the `Artifact` feature.
 
 jobs:
   python_3_4_test_plan:
@@ -49,7 +49,7 @@ jobs:
       - image: pypy:3-6
     environment:
       TOXENV: pypy
-      
+
   python_lint_test_plan:
     <<: [*test_plan]
     docker:
