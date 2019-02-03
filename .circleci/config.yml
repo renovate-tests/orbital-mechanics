@@ -46,7 +46,7 @@ jobs:
     # with support for pypy - https://github.com/pypa/pipenv/issues/3313
     <<: [*test_plan]
     docker:
-      - image: pypy:3-6@sha256:eb6325b75c1c70b4992eaa1bdd29e24e5f14d5324b4714a49f3e67783473214b
+      - image: pypy:3-6@sha256:5a6dd72a72290d3907b2a22d664ae6941705889e213ce10bbe8408e20ee8859f
     environment:
       TOXENV: pypy
 
